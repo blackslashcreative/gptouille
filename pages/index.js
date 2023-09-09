@@ -1,6 +1,5 @@
 import Head from "next/head";
 import { useState } from "react";
-import styles from "./index.module.css";
 import 'bootstrap/dist/css/bootstrap.css';
 import { AiFillMinusCircle } from "react-icons/ai";
 
@@ -8,6 +7,7 @@ export default function Home() {
   const [ingredientInput, setIngredientInput] = useState("");
   const [ingredients, setIngredients] = useState([]);
   const [result, setResult] = useState();
+  const [error, setError] = useState('');
 
   async function generateRecipes(event) {
     event.preventDefault();
@@ -29,8 +29,7 @@ export default function Home() {
       setIngredientInput("");
     } catch(error) {
       // Consider implementing your own error handling logic here
-      console.error(error);
-      alert(error.message);
+      setError(error.message);
     }
   }
 
@@ -46,7 +45,7 @@ export default function Home() {
     setIngredients(leftovers);
   }
 
-  const listIngredients = ingredients.map((ingredient) => <button key={ingredient} className={styles.pillbutton} onClick={() => removeIngredient({ingredient})}>{ingredient} <AiFillMinusCircle /></button>);
+  const listIngredients = ingredients.map((ingredient) => <button key={ingredient} className="pillbutton" onClick={() => removeIngredient({ingredient})}>{ingredient} <AiFillMinusCircle /></button>);
 
   return (
     <div>
@@ -55,10 +54,10 @@ export default function Home() {
         <link rel="icon" href="/rat.png" />
       </Head>
 
-      <main className={styles.main}>
+      <main className="main">
         <h1>gptouille</h1>
         <p className="subtitle">("gee-pee-too-ee" like ratatouille :)</p>
-        <img src="/rat.png" className={styles.icon} />
+        <img src="/rat.png" className="icon" />
         <p className="text-center">Hey gptouille, I have these ingredients to use up...<br />What's something healthy I can make?</p>
         <form onSubmit={addIngredient}>
           <input
@@ -71,12 +70,13 @@ export default function Home() {
           <input type="submit" value="+" />
         </form>
         {ingredients && (
-          <div className={styles.ingredientsList}>
+          <div className="ingredientsList">
             {listIngredients}
           </div>
         )}
-        <button className={styles.generateButton} onClick={generateRecipes}>Generate Recipes</button>
-        <div className={styles.result}>{result}</div>
+        <button className="generateButton" onClick={generateRecipes}>Generate Recipes</button>
+        <div className="result">{result}</div>
+        {error && <div className="status error">{error}</div>}
       </main>
     </div>
   );
