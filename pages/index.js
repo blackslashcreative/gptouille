@@ -9,9 +9,6 @@ export default function Home() {
   const [ingredients, setIngredients] = useState([]);
   const [result, setResult] = useState();
 
-  console.log(`ingredients... ${JSON.stringify(ingredients)}`);
-  console.log(`ingredientInput... ${JSON.stringify(ingredientInput)}`);
-
   async function generateRecipes(event) {
     event.preventDefault();
     try {
@@ -59,9 +56,9 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-        <img src="/rat.png" className={styles.icon} />
-        <h3>gptouille</h3>
+        <h1>gptouille</h1>
         <p className="subtitle">("gee-pee-too-ee" like ratatouille :)</p>
+        <img src="/rat.png" className={styles.icon} />
         <p className="text-center">Hey gptouille, I have these ingredients to use up...<br />What's something healthy I can make?</p>
         <form onSubmit={addIngredient}>
           <input

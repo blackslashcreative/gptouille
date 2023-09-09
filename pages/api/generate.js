@@ -15,11 +15,11 @@ export default async function (req, res) {
     return;
   }
 
-  const ingredient = req.body.ingredient || '';
+  const ingredients = req.body.ingredients || '';
   if (ingredient.trim().length === 0) {
     res.status(400).json({
       error: {
-        message: "Please enter an ingredient",
+        message: "Please enter at least one ingredient",
       }
     });
     return;

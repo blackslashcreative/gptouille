@@ -27,19 +27,20 @@
 
 .main .icon {
   width: 200px;
+  margin-bottom: 25px;
 }
 
-.main h3 {
+.main h1 {
   font-size: 32px;
   line-height: 40px;
   font-weight: bold;
   color: #202123;
-  margin: 16px 0 0;
+  margin: 0;
 }
 
-.main h3 + p {
+.main h1 + p {
   font-size: 0.7em;
-  margin-bottom: 40px;
+  margin-bottom: 0;
 }
 
 .main form, 
