@@ -35,8 +35,10 @@ export default function Home() {
 
   const addIngredient = (e) => {
     e.preventDefault();
-    setIngredients([...ingredients, ingredientInput]);
-    setIngredientInput("");
+    if (ingredientInput) {
+      setIngredients([...ingredients, ingredientInput]);
+      setIngredientInput("");
+    }
   }
   
   const removeIngredient = (item)  => {
