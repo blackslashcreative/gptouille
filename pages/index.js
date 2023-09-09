@@ -24,8 +24,9 @@ export default function Home() {
       if (response.status !== 200) {
         throw data.error || new Error(`Request failed with status ${response.status}`);
       }
-
-      setResult(data.result);
+      const recipes = data.result.split("\n\n");
+      recipes.shift();
+      setResult(recipes);
       setIngredientInput("");
     } catch(error) {
       // Consider implementing your own error handling logic here
@@ -57,8 +58,8 @@ export default function Home() {
       </Head>
 
       <main className="main">
-        <h1>gptouille</h1>
-        <p className="subtitle">("gee-pee-too-ee" like ratatouille :)</p>
+        <h1>gptouille.ai</h1>
+        <p className="subtitle">("jee-pee-too-ee" like ratatouille :)</p>
         <img src="/rat.png" className="icon" />
         <p className="text-center">Hey gptouille, I have these ingredients to use up...<br />What's something healthy I can make?</p>
         <form onSubmit={addIngredient}>
@@ -77,8 +78,12 @@ export default function Home() {
           </div>
         )}
         <button className="generateButton" onClick={generateRecipes}>Generate Recipes</button>
-        <div className="result">{result}</div>
-        {error && <div className="status error">{error}</div>}
+        {result && (
+          <div className="result">
+            {result.map( (recipe, index) => <p key={index}>{recipe}</p> )}
+          </div>
+        )}
+        {error && <div className="status error text-danger">{error}</div>}
       </main>
     </div>
   );

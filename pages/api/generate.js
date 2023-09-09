@@ -16,21 +16,22 @@ export default async function (req, res) {
   }
 
   const ingredients = req.body.ingredients || '';
-  console.log(ingredients);
+
   if ( ingredients.length < 1 ) {
     res.status(400).json({
       error: {
-        message: "Please enter at least one ingredient",
+        message: "Please enter at least one ingredient.",
       }
     });
     return;
   }
 
   try {
-    const completion = await openai.createCompletion({
-      model: "text-davinci-003",
+    const completion = await openai.createCompletion({ // TODO: update this legacy to new GPT capability???
+      model: "text-davinci-003", // TODO: gpt-3.5-turbo ???
       prompt: generatePrompt(ingredients),
       temperature: 0.6,
+      max_tokens: 4000 // length of response
     });
     // Return recipes
     res.status(200).json({ result: completion.data.choices[0].text });
