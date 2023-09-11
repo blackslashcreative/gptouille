@@ -1,4 +1,4 @@
-import OpenAI from "openai";
+import OpenAI from 'openai';
 
 const openai = new OpenAI({
   api_key: process.env.OPENAI_API_KEY
@@ -30,15 +30,15 @@ export default async function (req, res) {
       model: "gpt-3.5-turbo", // gpt-4 ??? (longer latency, more powerful, more expensive)
       messages: [
         { role: 'user', content: generatePrompt(ingredients) },
-        { role: 'user', content: 'Format the results in markdown.' },
-        { role: 'user', content: 'Each recipe should be formatted with a recipe title as a bold heading.' },
-        { role: 'user', content: 'The ingredients and instructions should be new paragraphs, not bold.' }
+        { role: 'user', content: 'Format the results in markdown.' }, 
+        { role: 'user', content: 'Start your answer with the recipe title as a headin level 1 in markdown.' },
+        { role: 'user', content: 'Text only, no images please.' }
       ],
       temperature: 0.6,
       max_tokens: 400 // length of response... 4000 for production
     });
     // Return recipes
-    console.log(JSON.stringify(completion));
+    console.log(JSON.stringify(completion.choices[0].message.content));
     res.status(200).json({ result: completion.choices[0].message.content });
   } catch(error) {
     // Consider adjusting the error handling logic for your use case
@@ -58,5 +58,5 @@ export default async function (req, res) {
 
 function generatePrompt(ingredients) {
   const ingredientsList = ingredients.join(", ").replace(/,(?=[^,]+$)/, ', and');
-  return `suggest 3 healthy dinner recipe ideas that calls for ${ingredientsList}.`;
+  return `suggest a healthy dinner recipe idea that calls for ${ingredientsList}.`;
 }

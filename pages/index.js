@@ -2,6 +2,7 @@ import Head from "next/head";
 import { useState } from "react";
 import 'bootstrap/dist/css/bootstrap.css';
 import { AiFillMinusCircle } from "react-icons/ai";
+import MarkdownView from 'react-showdown';
 
 export default function Home() {
   const [ingredientInput, setIngredientInput] = useState("");
@@ -26,8 +27,7 @@ export default function Home() {
       if (response.status !== 200) {
         throw data.error || new Error(`Request failed with status ${response.status}`);
       }
-      const recipes = data.result.split("\n");
-      setResult(recipes);
+      setResult(data.result);
       setLoading(false);
       setIngredientInput("");
     } catch(error) {
@@ -80,11 +80,17 @@ export default function Home() {
           </div>
         )}
         <button className="generateButton" onClick={generateRecipes}>
-          {loading ? 'loading...' : 'Generate Recipes'}
+          {loading ? <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div> : 'Generate Recipe'}
         </button>
         {result && (
           <div className="result">
-            {result.map( (recipe, index) => <p key={index}>{recipe}</p> )}
+            <MarkdownView
+              markdown={result}
+              options={{ 
+                simpleLineBreaks: true,
+                requireSpaceBeforeHeadingText: true
+              }}
+            />
           </div>
         )}
         {error && <div className="status error text-danger">{error}</div>}
