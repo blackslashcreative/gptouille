@@ -8,6 +8,7 @@ coming soon...
 
 ## Features & Roadmap
 - [x] Add open AI integration
+- [ ] Link to search for similar recipes (on Google)
 - [ ] User auth
 - [ ] Save & share recipes
 - [ ] ???

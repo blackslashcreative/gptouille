@@ -8,9 +8,11 @@ export default function Home() {
   const [ingredients, setIngredients] = useState([]);
   const [result, setResult] = useState();
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   async function generateRecipes(event) {
     event.preventDefault();
+    setLoading(true);
     try {
       const response = await fetch("/api/generate", {
         method: "POST",
@@ -24,9 +26,9 @@ export default function Home() {
       if (response.status !== 200) {
         throw data.error || new Error(`Request failed with status ${response.status}`);
       }
-      const recipes = data.result.split("\n\n");
-      recipes.shift();
+      const recipes = data.result.split("\n");
       setResult(recipes);
+      setLoading(false);
       setIngredientInput("");
     } catch(error) {
       // Consider implementing your own error handling logic here
@@ -77,7 +79,9 @@ export default function Home() {
             {listIngredients}
           </div>
         )}
-        <button className="generateButton" onClick={generateRecipes}>Generate Recipes</button>
+        <button className="generateButton" onClick={generateRecipes}>
+          {loading ? 'loading...' : 'Generate Recipes'}
+        </button>
         {result && (
           <div className="result">
             {result.map( (recipe, index) => <p key={index}>{recipe}</p> )}

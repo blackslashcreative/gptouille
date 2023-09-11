@@ -1,12 +1,11 @@
-import { Configuration, OpenAIApi } from "openai";
+import OpenAI from "openai";
 
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
+const openai = new OpenAI({
+  api_key: process.env.OPENAI_API_KEY
 });
-const openai = new OpenAIApi(configuration);
 
 export default async function (req, res) {
-  if (!configuration.apiKey) {
+  if (!openai.apiKey) {
     res.status(500).json({
       error: {
         message: "API key not configured",
@@ -27,14 +26,20 @@ export default async function (req, res) {
   }
 
   try {
-    const completion = await openai.createCompletion({ // TODO: update this legacy to new GPT capability???
-      model: "text-davinci-003", // TODO: gpt-3.5-turbo ???
-      prompt: generatePrompt(ingredients),
+    const completion = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo", // gpt-4 ??? (longer latency, more powerful, more expensive)
+      messages: [
+        { role: 'user', content: generatePrompt(ingredients) },
+        { role: 'user', content: 'Format the results in markdown.' },
+        { role: 'user', content: 'Each recipe should be formatted with a recipe title as a bold heading.' },
+        { role: 'user', content: 'The ingredients and instructions should be new paragraphs, not bold.' }
+      ],
       temperature: 0.6,
-      max_tokens: 4000 // length of response
+      max_tokens: 400 // length of response... 4000 for production
     });
     // Return recipes
-    res.status(200).json({ result: completion.data.choices[0].text });
+    console.log(JSON.stringify(completion));
+    res.status(200).json({ result: completion.choices[0].message.content });
   } catch(error) {
     // Consider adjusting the error handling logic for your use case
     if (error.response) {
